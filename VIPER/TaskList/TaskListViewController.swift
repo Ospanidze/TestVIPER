@@ -102,8 +102,8 @@ extension TaskListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
-        let taskList = presenter?.taskList(at: indexPath.row)
-        cell.configure(with: taskList)
+        let taskCellModel = presenter?.getCellModel(indexPath: indexPath)
+        cell.configure(with: taskCellModel)
         return cell
     }
     

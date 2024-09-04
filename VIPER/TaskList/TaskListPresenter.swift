@@ -7,6 +7,13 @@
 
 import Foundation
 import RealmSwift
+import UIKit
+
+struct CellModel {
+    let title: String
+    let subtitle: String?
+    let accessoryType: UITableViewCell.AccessoryType
+}
 
 protocol TaskListPresenterProtocol: AnyObject {
     func viewDidLoad()
@@ -18,6 +25,7 @@ protocol TaskListPresenterProtocol: AnyObject {
     func markTaskListAsDone(at indexPath: IndexPath)
     func save(taskListTitle: String)
     func sortingList(at index: Int)
+    func getCellModel(indexPath: IndexPath) -> CellModel
 }
 
 class TaskListPresenter {
@@ -91,5 +99,30 @@ extension TaskListPresenter: TaskListPresenterProtocol {
         ? taskLists.sorted(byKeyPath: "date")
         : taskLists.sorted(byKeyPath: "title")
         view?.reloadData()
+    }
+    
+    func getCellModel(indexPath: IndexPath) -> CellModel {
+        let taskList = taskLists[indexPath.row]
+        let currenTasks = taskList.tasks.filter("isComplete = false")
+        
+        let subtitle: String?
+        let accessoryType: UITableViewCell.AccessoryType
+        if taskList.tasks.isEmpty {
+            subtitle = "0"
+            accessoryType = .none
+        } else if currenTasks.isEmpty {
+            subtitle = nil
+            accessoryType = .checkmark
+        } else {
+            subtitle = currenTasks.count.formatted()
+            accessoryType = .none
+        }
+        
+        let cellModel = CellModel(
+            title: taskList.title,
+            subtitle: subtitle,
+            accessoryType: accessoryType
+        )
+        return cellModel
     }
 }

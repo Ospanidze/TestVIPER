@@ -9,24 +9,13 @@ import UIKit
 
 extension UITableViewCell {
     
-    func configure(with taskList: TaskList?) {
-        guard let taskList else { return }
-        let currenTasks = taskList.tasks.filter("isComplete = false")
+    func configure(with model: CellModel?) {
+        guard let model else { return }
         var content = defaultContentConfiguration()
         
-        content.text = taskList.title
-        
-        if taskList.tasks.isEmpty {
-            content.secondaryText = "0"
-            accessoryType = .none
-        } else if currenTasks.isEmpty {
-            content.secondaryText = nil
-            accessoryType = .checkmark
-        } else {
-            content.secondaryText = currenTasks.count.formatted()
-            accessoryType = .none
-        }
-        
+        content.text = model.title
+        content.secondaryText = model.subtitle
+        accessoryType = model.accessoryType
         contentConfiguration = content
     }
 }
